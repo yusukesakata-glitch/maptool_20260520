@@ -54,9 +54,29 @@
             .map-wrapper { flex: 1; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); position: relative; border: 1px solid var(--border); }
         }
         @media (max-width: 899px) {
-            .app-container { display: block; padding: 15px; }
-            .map-wrapper { height: 45vh; min-height: 300px; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); position: relative; margin-bottom: 20px; border: 1px solid var(--border); }
-            .right-section { padding-bottom: 120px; }
+            body { overflow: hidden; height: 100vh; }
+            .app-container { display: block; padding: 0; height: 100vh; overflow: hidden; }
+            .left-section {
+                position: fixed; inset: 0; z-index: 1;
+                display: flex; flex-direction: column; gap: 0;
+                height: 100vh;
+            }
+            .left-section.mob-hidden { display: none; }
+            .map-wrapper {
+                flex: 1; height: auto; min-height: unset;
+                border-radius: 0; margin-bottom: 0;
+                border: none; box-shadow: none;
+            }
+            .right-section {
+                position: fixed; inset: 0; z-index: 2;
+                display: none;
+                flex-direction: column;
+                height: 100vh;
+                overflow-y: auto;
+                background: var(--bg);
+                padding: 15px 15px calc(80px + env(safe-area-inset-bottom,0px));
+            }
+            .right-section.mob-visible { display: flex; }
         }
 
         /* ヘッダー */
@@ -507,15 +527,14 @@
         if(window.innerWidth >= 900) return;
         const leftEl = document.querySelector('.left-section');
         const rightEl = document.querySelector('.right-section');
-        if(panel === 'map') {
-            leftEl.style.display = '';
-            rightEl.style.display = 'none';
-        } else {
-            leftEl.style.display = 'none';
-            rightEl.style.display = '';
-        }
+        leftEl.classList.toggle('mob-hidden', panel !== 'map');
+        rightEl.classList.toggle('mob-visible', panel === 'list');
         document.getElementById('mbarMap').classList.toggle('active', panel === 'map');
         document.getElementById('mbarList').classList.toggle('active', panel === 'list');
+        // マップパネルに戻ったらリサイズイベントを発火してマップを再描画
+        if(panel === 'map' && map) {
+            setTimeout(() => google.maps.event.trigger(map, 'resize'), 100);
+        }
     }
 
     // 地図ボタン押したらマップパネルに切替
