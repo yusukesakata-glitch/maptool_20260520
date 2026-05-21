@@ -61,7 +61,11 @@
                 display: flex; flex-direction: column; gap: 0;
                 height: 100vh;
             }
-            .left-section.mob-hidden { display: none; }
+            .left-section.mob-hidden { display: none !important; }
+            /* マップエリアはボトムバーの高さ分上に */
+            .left-section .map-wrapper {
+                margin-bottom: calc(54px + env(safe-area-inset-bottom, 0px));
+            }
             .map-wrapper {
                 flex: 1; height: auto; min-height: unset;
                 border-radius: 0; margin-bottom: 0;
@@ -69,14 +73,14 @@
             }
             .right-section {
                 position: fixed; inset: 0; z-index: 2;
-                display: none;
+                display: none !important;
                 flex-direction: column;
                 height: 100vh;
                 overflow-y: auto;
                 background: var(--bg);
                 padding: 15px 15px calc(80px + env(safe-area-inset-bottom,0px));
             }
-            .right-section.mob-visible { display: flex; }
+            .right-section.mob-visible { display: flex !important; }
         }
 
         /* ヘッダー */
@@ -262,7 +266,7 @@
         /* ── モバイルボトムバー ── */
         .mobile-bar {
             display: none;
-            position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000;
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 99999;
             background: rgba(255,255,255,0.97);
             border-top: 1px solid var(--border);
             padding-bottom: env(safe-area-inset-bottom, 0px);
