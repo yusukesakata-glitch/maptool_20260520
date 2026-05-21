@@ -7,7 +7,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Field">
-    <meta name="theme-color" content="#222222">
+    <meta name="theme-color" content="#111111">
+    <link rel="manifest" href="manifest.json">
     <title>顧客マップDB Pro</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
@@ -1159,10 +1160,9 @@ input[type="text"]:focus,input[type="password"]:focus,textarea:focus{border-colo
             saveDB(type); updateTabCounts(); render(); closeModal();
         }
     }
-    // PWA
+    // PWA Service Worker
     if('serviceWorker' in navigator) {
-        const sw = `self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>self.clients.claim());self.addEventListener('fetch',e=>{if(e.request.url.includes('googleapis')||e.request.url.includes('gstatic'))return;e.respondWith(fetch(e.request).catch(()=>new Response('')));});`;
-        navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});
+        navigator.serviceWorker.register('./sw.js').catch(e => console.log('SW error:', e));
     }
     let _pwa;
     window.addEventListener('beforeinstallprompt',e=>{
