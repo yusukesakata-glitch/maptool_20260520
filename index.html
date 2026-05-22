@@ -234,27 +234,31 @@ input[type="text"]:focus,input[type="password"]:focus,textarea:focus{border-colo
             </button>
         </div>
 
-        <div style="margin-bottom:15px;">
-            <select id="prefFilter" onchange="resetAndRender()"><option value="ALL">都道府県: すべて</option></select></div>
-
-        <div class="search-box-style" style="margin-bottom:15px;">
-            <input type="text" id="searchInput" class="search-input-style" placeholder="" oninput="resetAndRender()" onkeydown="if(event.key==='Enter')smartSearch()">
-            <button class="search-btn-style" onclick="smartSearch()">
-                <svg class="svg-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-            </button>
+        <!-- 検索+都道府県フィルター -->
+        <div class="filter-full">
+            <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+                <div class="list-search-box" style="flex:1;margin:0;">
+                    <input type="text" id="searchInput" class="search-input-style" placeholder="" oninput="resetAndRender()" onkeydown="if(event.key==='Enter')smartSearch()" style="padding:8px 10px;">
+                    <button class="search-btn-style" onclick="smartSearch()">
+                        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    </button>
+                </div>
+                <div style="height:40px;padding:0 10px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);display:flex;align-items:center;flex-shrink:0;">
+                    <select id="prefFilter" onchange="resetAndRender()" style="border:none;background:none;font-size:.8rem;color:var(--ink2);padding:0;width:auto;outline:none;cursor:pointer;"><option value="ALL">都道府県</option></select>
+                </div>
+            </div>
         </div>
 
-        <div id="stats-area">
-            <div class="stats-header">
+        <div id="stats-area" style="padding:10px 14px;">
+            <div class="stats-header" style="margin-bottom:6px;">
                 <div class="stats-total" id="stats-total-text">-- 件</div>
                 <select id="limitSelect" class="limit-select" onchange="changeLimit()">
-                    <option value="100">表示: 100件</option>
-                    <option value="300">表示: 300件</option>
-                    <option value="500">表示: 500件</option>
-                    <option value="ALL">表示: 全件</option>
+                    <option value="100">100件</option>
+                    <option value="300">300件</option>
+                    <option value="500">500件</option>
+                    <option value="ALL">全件</option>
                 </select>
             </div>
-            <div id="display-count-text" style="font-size:0.75rem; color:var(--text-sub); margin-bottom:10px; font-family:var(--font-serif);"></div>
             <div class="stats-grid" id="stats-detail"></div>
         </div>
 
@@ -977,7 +981,7 @@ input[type="text"]:focus,input[type="password"]:focus,textarea:focus{border-colo
     }
     function populatePrefFilter() {
         const pSel=document.getElementById('prefFilter'); const current=pSel.value;
-        pSel.innerHTML='<option value="ALL">都道府県: すべて</option>';
+        pSel.innerHTML='<option value="ALL">都道府県</option>';
         const sourceDb = getCurrentDb();
         [...new Set(sourceDb.map(x=>getPrefecture(x.address)))].sort().forEach(p=>{const o=document.createElement('option');o.value=p;o.innerText=p;pSel.appendChild(o)});
         pSel.value=current;
